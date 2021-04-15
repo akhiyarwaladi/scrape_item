@@ -69,9 +69,11 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
         for item in json['items']:
             item_api.append([web_url, item['name'],item['itemid'],item['shopid'],item['price']])
 
-
+        if len(item_api) <= 0:
+            return url
         dfrm = pd.DataFrame(item_api, columns=['url','name','itemid','shopid','price'])
         dfrm['price'] = pd.to_numeric(dfrm['price'])
+
         print(dfrm)
         dfrm = dfrm.iloc[dfrm['price'].idxmax()]
         
