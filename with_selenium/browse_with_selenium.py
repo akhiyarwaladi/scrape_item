@@ -41,7 +41,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
             ('keyword', keyword),
             ('newest', 50*iteration),
             ('by', 'relevancy'),
-            ('limit', 50),
+            ('limit', 10),
             ('order', 'desc'),
             ('page_type', 'search'),
             ('version', 2),
@@ -75,7 +75,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
         dfrm['price'] = pd.to_numeric(dfrm['price'])
 
         print(dfrm)
-        dfrm = dfrm.iloc[dfrm['price'].idxmax()]
+        dfrm = dfrm.iloc[dfrm['price'].idxmin()]
         
         url.append(search_item_builder(dfrm['url'], dfrm['name'], dfrm['itemid'], dfrm['shopid']))
     return url
