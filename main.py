@@ -15,7 +15,7 @@ def main():
     driver = sel.init()
 
 
-    for SEARCH_KEYWORD in list(pd.read_excel('/home/server/gli-data-science/akhiyar/stok_tgl_13.xlsx')[5:].iloc[:,1])
+    for SEARCH_KEYWORD in list(pd.read_excel('/home/server/gli-data-science/akhiyar/stok_tgl_13.xlsx')[5:].iloc[:,1]):
         SAVED_FILE = "/home/server/gli-data-science/akhiyar/product_scrape/{}.json".format(SEARCH_KEYWORD)
         products=[]
         urls = sel.url_harvest_by_keyword(
