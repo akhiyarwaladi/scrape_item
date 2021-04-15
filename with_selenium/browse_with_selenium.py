@@ -60,7 +60,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
 
         try:
             json = requests.get(web_url+search_endpoint, headers=headers, params=params).json()
-            print(json)
+         
         except ValueError:
             print("Empty response from", web_url)
             driver.quit()
@@ -72,7 +72,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
 
         dfrm = pd.DataFrame(item_api, columns=['url','name','itemid','shopid','price'])
         dfrm = dfrm.iloc[dfrm['price'].idxmax()]
-        print(dfrm['url'])
+        
         url.append(search_item_builder(dfrm['url'], dfrm['name'], dfrm['itemid'], dfrm['shopid']))
     return url
 
