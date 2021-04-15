@@ -71,7 +71,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
 
 
         dfrm = pd.DataFrame(item_api, columns=['url','name','itemid','shopid','price'])
-        dfrm['a'] = pd.to_numeric(dfrm['price'])
+        dfrm['price'] = pd.to_numeric(dfrm['price'])
         print(dfrm)
         dfrm = dfrm.iloc[dfrm['price'].idxmax()]
         
