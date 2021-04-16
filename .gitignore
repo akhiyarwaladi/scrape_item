@@ -4,3 +4,6 @@
 *.pkl
 dump/
 template/
+__pycache__/
+*.pyc
+*.log

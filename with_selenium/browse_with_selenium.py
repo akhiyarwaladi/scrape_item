@@ -5,6 +5,8 @@ from slugify import slugify
 import time
 from selenium.webdriver.firefox.options import Options
 import pandas as pd
+import numpy as np
+import textdistance
 
 def init():
     """Scrape-id using Firefox webdriver as a default, 
@@ -41,26 +43,17 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
             ('keyword', keyword),
             ('newest', 50*iteration),
             ('by', 'relevancy'),
-            ('limit', 10),
+            ('limit', 50),
             ('order', 'desc'),
             ('page_type', 'search'),
             ('version', 2),
-	    ('official_mall', 1)
+            ('official_mall', 1)
         )
-        #import urllib.parse
-        #keyword_parse = urllib.parse.quote(keyword)
-        #parent_url = "https://shopee.co.id/mall/search?keyword={}&order=asc&originalResultType=4&page=0&sortBy=price"\
-        #                .format(keyword_parse)
-        #print(parent_url)
-        #driver.get(parent_url)
-        #time.sleep(10)
-        #res_item = driver.find_elements_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div/div[2]/div[1]')
-        #for res in res_item:
-        #    print(res.get_attribute("href"))
 
         try:
             json = requests.get(web_url+search_endpoint, headers=headers, params=params).json()
          
+            # print(json)
         except ValueError:
             print("Empty response from", web_url)
             driver.quit()
@@ -69,19 +62,36 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
         for item in json['items']:
             item_api.append([web_url, item['name'],item['itemid'],item['shopid'],item['price']])
 
-        if len(item_api) <= 0:
-            print(item['name'])
-            print("NOT FOUND")
-            return url
 
+    # check empty results
+    if len(item_api) <= 0:
+       
+        print("{} NOT FOUND".format(keyword))
+        return url
+    #item_api = list(np.unique(item_api))
 
-        dfrm = pd.DataFrame(item_api, columns=['url','name','itemid','shopid','price'])
-        dfrm['price'] = pd.to_numeric(dfrm['price'])
+    dfrm = pd.DataFrame(item_api, columns=['url','name','itemid','shopid','price'])
+    dfrm = dfrm.drop_duplicates()
+    dfrm['keyword'] = keyword
 
-        print(dfrm)
-        dfrm = dfrm.iloc[dfrm['price'].idxmin()]
-        
-        url.append(search_item_builder(dfrm['url'], dfrm['name'], dfrm['itemid'], dfrm['shopid']))
+    # print(dfrm)
+    dfrm['distance'] = dfrm.apply(lambda x: textdistance.levenshtein.normalized_similarity(\
+                            x['name'].lower(), x['keyword'].lower()), axis=1)
+
+   
+    dfrm = dfrm[dfrm['distance'] > 0.5].reset_index(drop=True)
+    print(dfrm)
+    if len(dfrm) <= 0:
+       
+        print("{} NOT FOUND IN FILTER DISTANCE".format(keyword))
+        return url
+
+    # get lowest price
+    dfrm['price'] = pd.to_numeric(dfrm['price'])
+    
+    dfrm = dfrm.iloc[dfrm['price'].idxmin()]
+    
+    url.append(search_item_builder(dfrm['url'], dfrm['name'], dfrm['itemid'], dfrm['shopid']))
     return url
 
 def search_item_builder(web_url, item_name, item_id, shop_id):
