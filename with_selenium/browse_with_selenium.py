@@ -29,38 +29,36 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
     """
     url= []
     item_api = []
-    for iteration in range(iteration):
-        headers = {
-            'authority': 'shopee.co.id',
-            'x-shopee-language': 'id',
-            'x-requested-with': 'XMLHttpRequest',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 Edg/83.0.478.61',
-            'x-api-source': 'pc',
-            'accept': '*/*',
-        }
+    # for iteration in range(iteration):
+    headers = {
+        'authority': 'shopee.co.id',
+        'x-shopee-language': 'id',
+        'x-requested-with': 'XMLHttpRequest',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 Edg/83.0.478.61',
+        'x-api-source': 'pc',
+        'accept': '*/*',
+    }
 
-        params = (
-            ('keyword', keyword),
-            ('newest', 50*iteration),
-            ('by', 'relevancy'),
-            ('limit', 50),
-            ('order', 'desc'),
-            ('page_type', 'search'),
-            ('version', 2),
-            ('official_mall', 1)
-        )
+    params = (
+        ('keyword', keyword),
+        ('by', 'relevancy'),
+        ('order', 'desc'),
+        ('page_type', 'search'),
+        ('version', 2),
+        ('official_mall', 1)
+    )
 
-        try:
-            json = requests.get(web_url+search_endpoint, headers=headers, params=params).json()
-         
-            # print(json)
-        except ValueError:
-            print("Empty response from", web_url)
-            driver.quit()
-            exit()
+    try:
+        json = requests.get(web_url+search_endpoint, headers=headers, params=params).json()
+     
+        # print(json)
+    except ValueError:
+        print("Empty response from", web_url)
+        driver.quit()
+        exit()
 
-        for item in json['items']:
-            item_api.append([web_url, item['name'],item['itemid'],item['shopid'],item['price']])
+    for item in json['items']:
+        item_api.append([web_url, item['name'],item['itemid'],item['shopid'],item['price']])
 
 
     # check empty results
@@ -79,7 +77,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
                             x['name'].lower(), x['keyword'].lower()), axis=1)
 
    
-    dfrm = dfrm[dfrm['distance'] > 0.5].reset_index(drop=True)
+    dfrm = dfrm[dfrm['distance'] > 0.3].reset_index(drop=True)
     print(dfrm)
     if len(dfrm) <= 0:
        
