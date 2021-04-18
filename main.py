@@ -18,7 +18,7 @@ def main():
     for idx, row in pd.read_excel(os.path.join(parent_path, 'stok_tgl_13.xlsx'))[5:]\
                         .iloc[:,0:2].reset_index(drop=True).iterrows():
         SEARCH_KEYWORD = row.iloc[1]
-        #SEARCH_KEYWORD = "TROP'S SANTAN 20G"
+        # SEARCH_KEYWORD = "HAAN PUD FLAN TIRAMISU 140G"
         # PAMPERS PANTS L-62
         print(SEARCH_KEYWORD)
         SAVED_FILE = os.path.join(parent_path, "product_scrape/{}.json".format(SEARCH_KEYWORD))

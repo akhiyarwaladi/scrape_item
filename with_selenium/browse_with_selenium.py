@@ -18,7 +18,7 @@ def init():
     driver = webdriver.Firefox() 
     """
     options = Options()
-    options.headless = True
+    # options.headless = True
     driver = webdriver.Firefox(options=options)
     
     return driver
@@ -51,7 +51,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
     try:
         json = requests.get(web_url+search_endpoint, headers=headers, params=params).json()
      
-        print(json)
+        #print(json)
     except ValueError:
         print("Empty response from", web_url)
         driver.quit()
@@ -100,30 +100,52 @@ def search_item_builder(web_url, item_name, item_id, shop_id):
     return web_url+slugify(item_name).lower()+"-i."+str(shop_id)+"."+str(item_id)
 
 def search(driver, url):
-    driver.get(url)
-    time.sleep(7)
+    if url == 'https://shopee.co.id/':
+        return None
 
+    driver.get(url)
+    time.sleep(10)
+    product = {
+        'url' : url,
+
+    }
     # Fixed 
     try:
         title = driver.find_elements_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[1]/span')
-        price = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[3]/div/div')
-        deskripsi = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[2]/div[2]/div/span')
-        category = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[2]')
-        subcategory = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[3]')
-        seller = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[1]/div[1]/div/div[1]')
-
     except NoSuchElementException: 
-        return None 
+        title = '-'
+        product['title'] = title
 
-    product = {
-        'url' : url,
-        'title' : title[0].text,
-        'price' : price.text,
-        'desc' : deskripsi.text,
-        'category' : category.text,
-        'subcategory' : subcategory.text,
-        'seller' : seller.text
-    }
+    try:
+        price = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[3]/div/div')
+    except NoSuchElementException:
+        price = '-'
+        product['price'] = price
+
+    try:
+        deskripsi = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[2]/div[2]/div/span')
+    except NoSuchElementException:
+        deskripsi = '-'
+        product['desc'] = deskripsi
+
+    try:
+        category = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[2]')
+    except NoSuchElementException:
+        category = '-'
+        product['category'] = category
+
+    try:
+        subcategory = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[3]')
+    except NoSuchElementException:
+        subcategory = '-'
+        product['subcategory'] = subcategory
+
+    try:
+        seller = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[1]/div[1]/div/div[1]')
+    except NoSuchElementException:
+        seller = '-'
+        product['seller'] = seller
+
     # Buggy, still have a bug
     try:
         terjual = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[2]/div[3]/div[1]')
@@ -149,6 +171,19 @@ def search(driver, url):
         city = '-'
         product['city'] = city
 
+
+    if(title != '-'):
+        product['title'] = title[0].text
+    if(price != '-'):
+        product['price'] = price.text
+    if(deskripsi != '-'):
+        product['desc'] = deskripsi.text
+    if(category != '-'):
+        product['category'] = category.text
+    if(subcategory != '-'):
+        product['subcategory'] = subcategory.text
+    if(seller != '-'):
+        product['seller'] = seller.text
     if(subsubcategory != '-'):
         product['subsubcategory'] = subsubcategory.text
     if(city != '-'):
