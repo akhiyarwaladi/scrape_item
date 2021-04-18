@@ -51,7 +51,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
     try:
         json = requests.get(web_url+search_endpoint, headers=headers, params=params).json()
      
-        # print(json)
+        print(json)
     except ValueError:
         print("Empty response from", web_url)
         driver.quit()
@@ -65,32 +65,33 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
     if len(item_api) <= 0:
        
         print("{} NOT FOUND".format(keyword))
-        return url
+        return url, None
     #item_api = list(np.unique(item_api))
 
     dfrm = pd.DataFrame(item_api, columns=['url','name','itemid','shopid','price'])
     dfrm = dfrm.drop_duplicates()
     dfrm['keyword'] = keyword
 
-    # print(dfrm)
-    dfrm['distance'] = dfrm.apply(lambda x: textdistance.levenshtein.normalized_similarity(\
-                            x['name'].lower(), x['keyword'].lower()), axis=1)
 
-   
+    # get similarity string to filtering non match as a string
+    dfrm['distance'] = dfrm.apply(lambda x: textdistance.levenshtein.normalized_similarity(\
+                            x['name'].lower(), x['keyword'].lower()), axis=1)   
     dfrm = dfrm[dfrm['distance'] > 0.3].reset_index(drop=True)
     print(dfrm)
     if len(dfrm) <= 0:
        
         print("{} NOT FOUND IN FILTER DISTANCE".format(keyword))
-        return url
+        return url, None
 
     # get lowest price
-    dfrm['price'] = pd.to_numeric(dfrm['price'])
-    
+    dfrm['price'] = pd.to_numeric(dfrm['price'])    
     dfrm = dfrm.iloc[dfrm['price'].idxmin()]
     
-    url.append(search_item_builder(dfrm['url'], dfrm['name'], dfrm['itemid'], dfrm['shopid']))
-    return url
+    # build url from return api detail
+    link_builder = search_item_builder(dfrm['url'], dfrm['name'], \
+                                        dfrm['itemid'], dfrm['shopid'])
+    url.append(link_builder)
+    return url, (link_builder, dfrm['name'], dfrm['price'])
 
 def search_item_builder(web_url, item_name, item_id, shop_id):
     """This method build a compact url that
