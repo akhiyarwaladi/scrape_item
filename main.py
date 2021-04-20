@@ -15,28 +15,41 @@ def main():
     driver = sel.init()
 
 
-    for idx, row in pd.read_excel(os.path.join(parent_path, 'stok_tgl_13.xlsx'))[5:]\
-                        .iloc[:,0:2].reset_index(drop=True).iterrows():
-        SEARCH_KEYWORD = row.iloc[1]
-        # SEARCH_KEYWORD = "HAAN PUD FLAN TIRAMISU 140G"
-        # PAMPERS PANTS L-62
-        print(SEARCH_KEYWORD)
-        SAVED_FILE = os.path.join(parent_path, "product_scrape/{}.json".format(SEARCH_KEYWORD))
+    # for idx, row in pd.read_excel(os.path.join(parent_path, 'stok_tgl_13.xlsx'))[5:]\
+    #                     .iloc[:,0:2].reset_index(drop=True).iterrows():
+    for idx, row in pd.read_excel(os.path.join(parent_path,'test_url_shopee.xlsx')).iterrows():
         products=[]
-    
 
-        urls, det_urls = sel.url_harvest_by_keyword(
-                                driver=driver,
-                                web_url=SHOPEE_URL, 
-                                search_endpoint=SEARCH_ENDPOINT, 
-                                keyword=SEARCH_KEYWORD,
-                                iteration=SEARCH_ITERATION)
 
-        # for idx, url in enumerate(urls):
-        if len(urls) <= 0:
-            url = 'https://shopee.co.id/'
-        else:
-            url = urls[0]
+        SEARCH_KEYWORD = row.iloc[1]
+        url = row.iloc[2]
+        plu_alfa = row.iloc[0]
+        
+
+
+        # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
+        # url = 'https://shopee.co.id/Similac-GainPlus-850-g-(1-3-tahun)-Susu-Pertumbuhan-Milk-Powder-3-kaleng-FREE-Cutting-book-i.27475286.4084210979'
+        # plu_alfa = 234331
+        print(SEARCH_KEYWORD)
+        
+        SAVED_FILE = os.path.join(parent_path, "product_scrape/{}.json".format(SEARCH_KEYWORD))
+
+
+        ######## if we dont have url we must search in database
+        # urls, det_urls = sel.url_harvest_by_keyword(
+        #                         driver=driver,
+        #                         web_url=SHOPEE_URL, 
+        #                         search_endpoint=SEARCH_ENDPOINT, 
+        #                         keyword=SEARCH_KEYWORD,
+        #                         iteration=SEARCH_ITERATION)
+
+        # # for idx, url in enumerate(urls):
+        # if len(urls) <= 0:
+        #     url = 'https://shopee.co.id/'
+        # else:
+        #     url = urls[0]
+        # print(url)
+        #######################################################
 
         product = sel.search(driver=driver, url=url)
         # failed to get detail item in product page
@@ -54,7 +67,9 @@ def main():
                 }
 
         # get our plu as a key to search item
-        product['plu_alfa'] = row.iloc[0]
+        
+
+        product['plu_alfa'] = plu_alfa
         products.append(product)
 
 

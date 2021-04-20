@@ -1,12 +1,20 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-import requests
-from slugify import slugify
-import time
 from selenium.webdriver.firefox.options import Options
+
+
+import requests
+import time
+
+from slugify import slugify
+
 import pandas as pd
 import numpy as np
-import textdistance
+
+
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 def init():
     """Scrape-id using Firefox webdriver as a default, 
@@ -87,6 +95,7 @@ def url_harvest_by_keyword(driver, web_url, search_endpoint, keyword, iteration 
     dfrm['price'] = pd.to_numeric(dfrm['price'])    
     dfrm = dfrm.iloc[dfrm['price'].idxmin()]
     
+    print(dfrm)
     # build url from return api detail
     link_builder = search_item_builder(dfrm['url'], dfrm['name'], \
                                         dfrm['itemid'], dfrm['shopid'])
@@ -140,13 +149,19 @@ def search(driver, url):
         subcategory = '-'
         product['subcategory'] = subcategory
 
+    seller = '-'
     try:
         seller = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[1]/div[1]/div/div[1]')
-    except NoSuchElementException:
-        seller = '-'
-        product['seller'] = seller
+    except NoSuchElementException as NEE:
+        pass
 
-    # Buggy, still have a bug
+    if(seller == '-'):
+        try:
+            seller = driver.find_element_by_css_selector('._3uf2ae')
+        except NoSuchElementException as NEE:
+            seller = '-'
+            product['seller'] = seller
+
     try:
         terjual = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[2]/div[3]/div[1]')
     except NoSuchElementException:
