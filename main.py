@@ -7,8 +7,8 @@ SHOPEE_URL = "https://shopee.co.id/"
 SEARCH_ENDPOINT = "api/v2/search_items/"
 SEARCH_ITERATION = 3   # Number of page to browse
 
-#parent_path = '/home/server/gli-data-science/akhiyar'
-parent_path = '/home/rahasia/gli'
+parent_path = '/home/server/gli-data-science/akhiyar'
+#parent_path = '/home/rahasia/gli'
 def main():
     """Using selenium to scrape Shopee """
 
@@ -17,7 +17,7 @@ def main():
 
     # for idx, row in pd.read_excel(os.path.join(parent_path, 'stok_tgl_13.xlsx'))[5:]\
     #                     .iloc[:,0:2].reset_index(drop=True).iterrows():
-    for idx, row in pd.read_excel(os.path.join(parent_path,'test_url_shopee.xlsx')).iterrows():
+    for idx, row in pd.read_excel(os.path.join(parent_path,'20210421_TagI_Competitiveness.xlsx')).iterrows():
         products=[]
 
 
