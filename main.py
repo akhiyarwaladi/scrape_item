@@ -7,8 +7,8 @@ SHOPEE_URL = "https://shopee.co.id/"
 SEARCH_ENDPOINT = "api/v2/search_items/"
 SEARCH_ITERATION = 3   # Number of page to browse
 
-parent_path = '/home/server/gli-data-science/akhiyar'
-#parent_path = '/home/rahasia/gli'
+# parent_path = '/home/server/gli-data-science/akhiyar'
+parent_path = '/home/rahasia/gli'
 def main():
     """Using selenium to scrape Shopee """
 
@@ -17,64 +17,71 @@ def main():
 
     # for idx, row in pd.read_excel(os.path.join(parent_path, 'stok_tgl_13.xlsx'))[5:]\
     #                     .iloc[:,0:2].reset_index(drop=True).iterrows():
-    for idx, row in pd.read_excel(os.path.join(parent_path,'20210421_TagI_Competitiveness.xlsx')).iterrows():
-        products=[]
+    for sheet_id in range(0,2,1):
+        sheet_id = 1
+        for idx, row in pd.read_excel(os.path.join(parent_path,\
+                        '20210421_TagI_Competitiveness.xlsx'), sheet_name=sheet_id).iterrows():
+            products=[]
 
 
-        SEARCH_KEYWORD = row.iloc[1]
-        url = row.iloc[2]
-        plu_alfa = row.iloc[0]
-        
+            SEARCH_KEYWORD = row.iloc[1]
+            url = row.iloc[2]
+            plu_alfa = row.iloc[0]
+            
 
 
-        # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
-        # url = 'https://shopee.co.id/Similac-GainPlus-850-g-(1-3-tahun)-Susu-Pertumbuhan-Milk-Powder-3-kaleng-FREE-Cutting-book-i.27475286.4084210979'
-        # plu_alfa = 234331
-        print(SEARCH_KEYWORD)
-        
-        SAVED_FILE = os.path.join(parent_path, "product_scrape/{}.json".format(SEARCH_KEYWORD))
+            # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
+            # url = 'https://shopee.co.id/Similac-GainPlus-850-g-(1-3-tahun)-Susu-Pertumbuhan-Milk-Powder-3-kaleng-FREE-Cutting-book-i.27475286.4084210979'
+            # plu_alfa = 234331
+            print(SEARCH_KEYWORD)
+            
+            SAVED_FILE = os.path.join(parent_path, "product_scrape_{}/{}.json"\
+                        .format(sheet_id, SEARCH_KEYWORD))
 
 
-        ######## if we dont have url we must search in database
-        # urls, det_urls = sel.url_harvest_by_keyword(
-        #                         driver=driver,
-        #                         web_url=SHOPEE_URL, 
-        #                         search_endpoint=SEARCH_ENDPOINT, 
-        #                         keyword=SEARCH_KEYWORD,
-        #                         iteration=SEARCH_ITERATION)
+            ######## if we dont have url we must search in database
+            # urls, det_urls = sel.url_harvest_by_keyword(
+            #                         driver=driver,
+            #                         web_url=SHOPEE_URL, 
+            #                         search_endpoint=SEARCH_ENDPOINT, 
+            #                         keyword=SEARCH_KEYWORD,
+            #                         iteration=SEARCH_ITERATION)
 
-        # # for idx, url in enumerate(urls):
-        # if len(urls) <= 0:
-        #     url = 'https://shopee.co.id/'
-        # else:
-        #     url = urls[0]
-        # print(url)
-        #######################################################
+            # # for idx, url in enumerate(urls):
+            # if len(urls) <= 0:
+            #     url = 'https://shopee.co.id/'
+            # else:
+            #     url = urls[0]
+            # print(url)
+            #######################################################
 
-        product = sel.search(driver=driver, url=url)
-        # failed to get detail item in product page
-        if product is None:
-            if det_urls is None:
-                print("CANNOT GET DETAIL {}".format(url))
-                product = {}
-            # if we already get mini detail in api but fail in big detail product page
+            if sheet_id == 0:
+                product = sel.search(driver=driver, url=url)
             else:
-                print("WE HAVE API DETAIL \n{}".format(det_urls))
-                product = {
-                    'url' : det_urls[0],
-                    'title' : det_urls[1],
-                    'price' : str(det_urls[2])
-                }
+                product = sel.search_klik(driver=driver, url=url)
+            # failed to get detail item in product page
+            if product is None:
+                if det_urls is None:
+                    print("CANNOT GET DETAIL {}".format(url))
+                    product = {}
+                # if we already get mini detail in api but fail in big detail product page
+                else:
+                    print("WE HAVE API DETAIL \n{}".format(det_urls))
+                    product = {
+                        'url' : det_urls[0],
+                        'title' : det_urls[1],
+                        'price' : str(det_urls[2])
+                    }
 
-        # get our plu as a key to search item
-        
+            # get our plu as a key to search item
+            
 
-        product['plu_alfa'] = plu_alfa
-        products.append(product)
+            product['plu_alfa'] = plu_alfa
+            products.append(product)
 
 
-        with open(SAVED_FILE, 'w', encoding='utf-8') as f:
-            json.dump(products, f, ensure_ascii=False, indent=4)
+            with open(SAVED_FILE, 'w', encoding='utf-8') as f:
+                json.dump(products, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     main()

@@ -26,7 +26,7 @@ def init():
     driver = webdriver.Firefox() 
     """
     options = Options()
-    options.headless = True
+    options.headless = False
     driver = webdriver.Firefox(options=options)
     
     return driver
@@ -158,6 +158,108 @@ def search(driver, url):
     if(seller == '-'):
         try:
             seller = driver.find_element_by_css_selector('._3uf2ae')
+        except NoSuchElementException as NEE:
+            seller = '-'
+            product['seller'] = seller
+
+    try:
+        terjual = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[2]/div[3]/div[1]')
+    except NoSuchElementException:
+        terjual = '-'
+        product['sold'] = terjual
+
+    try:
+        star = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[2]/div[1]/div[1]')
+    except NoSuchElementException:
+        star = '-'
+        product['star'] = star
+
+    try:
+        subsubcategory = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[4]')
+    except NoSuchElementException:
+        subsubcategory = '-'
+        product['subsubcategory'] = subsubcategory
+    
+    try:
+        city = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[6]/div')
+    except NoSuchElementException:
+        city = '-'
+        product['city'] = city
+
+
+    if(title != '-'):
+        product['title'] = title[0].text
+    if(price != '-'):
+        product['price'] = price.text
+    if(deskripsi != '-'):
+        product['desc'] = deskripsi.text
+    if(category != '-'):
+        product['category'] = category.text
+    if(subcategory != '-'):
+        product['subcategory'] = subcategory.text
+    if(seller != '-'):
+        product['seller'] = seller.text
+    if(subsubcategory != '-'):
+        product['subsubcategory'] = subsubcategory.text
+    if(city != '-'):
+        product['city'] = city.text
+    if(terjual != '-'):
+        product['sold'] = terjual.text
+    if(star != '-'):
+        product['star'] = star.text
+
+    return product
+
+def search_klik(driver, url):
+    if url == 'https://shopee.co.id/':
+        return None
+
+    driver.get(url)
+    time.sleep(10)
+    product = {
+        'url' : url,
+
+    }
+    # Fixed 
+    try:
+        title = driver.find_elements_by_xpath('//*[@id="section-detailInfo"]/div/div[1]/h3')
+    except NoSuchElementException: 
+        title = '-'
+        product['title'] = title
+
+    try:
+        price = driver.find_element_by_xpath('//*[@id="section-detailInfo"]/div/div[2]')
+    except NoSuchElementException:
+        price = '-'
+        product['price'] = price
+
+    try:
+        deskripsi = driver.find_element_by_xpath('//*[@id="section-detailInfo"]/div/div[4]/div[2]/div/span')
+    except NoSuchElementException:
+        deskripsi = '-'
+        product['desc'] = deskripsi
+
+    try:
+        category = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[2]')
+    except NoSuchElementException:
+        category = '-'
+        product['category'] = category
+
+    try:
+        subcategory = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div/a[3]')
+    except NoSuchElementException:
+        subcategory = '-'
+        product['subcategory'] = subcategory
+
+    seller = '-'
+    try:
+        seller = driver.find_element_by_xpath('//*[@id="section-detailInfo"]/div/div[1]/span[1]/span')
+    except NoSuchElementException as NEE:
+        pass
+
+    if(seller == '-'):
+        try:
+            seller = driver.find_element_by_css_selector('div.each-section:nth-child(1) > span:nth-child(2) > span:nth-child(2)')
         except NoSuchElementException as NEE:
             seller = '-'
             product['seller'] = seller
