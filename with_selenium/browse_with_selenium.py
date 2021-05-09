@@ -26,7 +26,7 @@ def init():
     driver = webdriver.Firefox() 
     """
     options = Options()
-    options.headless = False
+    options.headless = True
     driver = webdriver.Firefox(options=options)
     
     return driver

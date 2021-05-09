@@ -7,8 +7,8 @@ SHOPEE_URL = "https://shopee.co.id/"
 SEARCH_ENDPOINT = "api/v2/search_items/"
 SEARCH_ITERATION = 3   # Number of page to browse
 
-# parent_path = '/home/server/gli-data-science/akhiyar'
-parent_path = '/home/rahasia/gli'
+parent_path = '/home/server/gli-data-science/akhiyar'
+#parent_path = '/home/rahasia/gli'
 def main():
     """Using selenium to scrape Shopee """
 
@@ -17,8 +17,8 @@ def main():
 
     # for idx, row in pd.read_excel(os.path.join(parent_path, 'stok_tgl_13.xlsx'))[5:]\
     #                     .iloc[:,0:2].reset_index(drop=True).iterrows():
-    for sheet_id in range(0,2,1):
-        sheet_id = 1
+    for sheet_id in range(0,3,1):
+        #sheet_id = 2
         for idx, row in pd.read_excel(os.path.join(parent_path,\
                         '20210421_TagI_Competitiveness.xlsx'), sheet_name=sheet_id).iterrows():
             products=[]
@@ -27,7 +27,7 @@ def main():
             SEARCH_KEYWORD = row.iloc[1]
             url = row.iloc[2]
             plu_alfa = row.iloc[0]
-            
+            print(url)            
 
 
             # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
