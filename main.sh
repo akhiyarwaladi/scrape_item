@@ -20,3 +20,4 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/oracle/instantclient_19_8"
 export PATH=$PATH:/home/server/script/geckodriver_
 
 /opt/anaconda3/envs/scrap/bin/python /home/server/script/scrape-id/main.py
+/opt/anaconda3/bin/python /home/server/gli-data-science/akhiyar/adhoc_req/product_marketplace.py

@@ -13,7 +13,7 @@ def main():
     """Using selenium to scrape Shopee """
 
     driver = sel.init()
-    with open('dead_link.txt', 'w') as li_link:    
+    with open(os.path.join(parent_path,'dead_link.txt'), 'w') as li_link:    
         for sheet_id in range(0,3,1):
             #sheet_id = 2
 
@@ -86,7 +86,7 @@ def main():
                 except Exception as e:
                     print('{} --> {}'.format(e, SEARCH_KEYWORD))
                     
-                    li_link.write("() ()".format(plu_alfa, str(url))+'\n')
+                    li_link.write("({})\n({})".format(SEARCH_KEYWORD, str(url))+'\n')
                     continue
     li_link.close()
 
