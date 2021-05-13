@@ -8,7 +8,7 @@ SEARCH_ENDPOINT = "api/v2/search_items/"
 SEARCH_ITERATION = 3   # Number of page to browse
 
 parent_path = '/home/server/gli-data-science/akhiyar'
-#parent_path = '/home/rahasia/gli'
+# parent_path = '/home/rahasia/gli'
 def main():
     """Using selenium to scrape Shopee """
 
@@ -32,7 +32,7 @@ def main():
 
 
                 # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
-                # url = 'https://shopee.co.id/Similac-GainPlus-850-g-(1-3-tahun)-Susu-Pertumbuhan-Milk-Powder-3-kaleng-FREE-Cutting-book-i.27475286.4084210979'
+                # url = 'https://shopee.co.id/Similac-GainPlus-400-g-(1-3-tahun)-Susu-Pertumbuhan-Milk-Powder-i.27475286.346997327'
                 # plu_alfa = 234331
                 
                 
@@ -79,15 +79,17 @@ def main():
                     product['plu_alfa'] = plu_alfa
                     products.append(product)
 
+                    print(products)
 
                     with open(SAVED_FILE, 'w', encoding='utf-8') as f:
                         json.dump(products, f, ensure_ascii=False, indent=4)
+
 
                 except Exception as e:
                     print('{} --> {}'.format(e, SEARCH_KEYWORD))
                     
                     li_link.write("({})\n({})".format(SEARCH_KEYWORD, str(url))+'\n')
-                    continue
+                    break
     li_link.close()
 
 if __name__ == "__main__":
