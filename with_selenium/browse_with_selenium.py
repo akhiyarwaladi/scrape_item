@@ -133,11 +133,18 @@ def search(driver, url):
             title = '-'
             product['title'] = title
 
-    try:
+    try:                                    
         price = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[3]/div/div')
     except NoSuchElementException:
         price = '-'
         product['price'] = price
+        
+    if (price == '-'):
+        try:
+            price = driver.find_elements_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[3]/div/div[3]/div/div')
+        except Exception as e:
+            price = '-'
+            product['price'] = price
 
     try:
         deskripsi = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div[1]/div[1]/div[2]/div[2]/div/span')
