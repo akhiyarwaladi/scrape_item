@@ -32,7 +32,7 @@ def main():
 
 
                 # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
-                # url = 'https://shopee.co.id/Similac-GainPlus-400-g-(1-3-tahun)-Susu-Pertumbuhan-Milk-Powder-i.27475286.346997327'
+                # url = 'https://shopee.co.id/Dougo-Minyak-Canola-100-1000ML-i.40341578.1683845867'
                 # plu_alfa = 234331
                 
                 
@@ -89,7 +89,7 @@ def main():
                     print('{} --> {}'.format(e, SEARCH_KEYWORD))
                     
                     li_link.write("({})\n({})".format(SEARCH_KEYWORD, str(url))+'\n')
-                    break
+                    
     li_link.close()
 
 if __name__ == "__main__":

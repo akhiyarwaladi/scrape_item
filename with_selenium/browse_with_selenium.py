@@ -141,7 +141,7 @@ def search(driver, url):
         
     if (price == '-'):
         try:
-            price = driver.find_elements_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[3]/div/div[3]/div/div')
+            price = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[3]/div/div[3]/div/div')
         except Exception as e:
             price = '-'
             product['price'] = price
