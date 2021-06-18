@@ -21,3 +21,4 @@ export PATH=$PATH:/home/server/script/geckodriver_
 
 /opt/anaconda3/envs/scrap/bin/python /home/server/script/scrape-id/main.py
 /opt/anaconda3/bin/python /home/server/gli-data-science/akhiyar/adhoc_req/product_marketplace.py
+#/opt/anaconda3/bin/python /home/server/gli-data-science/akhiyar/adhoc_req/mcs_dump.py

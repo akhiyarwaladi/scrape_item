@@ -14,9 +14,10 @@ def main():
 
     driver = sel.init()
     with open(os.path.join(parent_path,'dead_link.txt'), 'w') as li_link:    
-        for sheet_id in range(0,3,1):
+        for sheet_id in range(0,4,1):
             #sheet_id = 2
-
+            #if sheet_id == 0 or sheet_id == 1 or sheet_id == 2:
+            #    continue
             for idx, row in pd.read_excel(os.path.join(parent_path,\
                             '20210421_TagI_Competitiveness.xlsx'), sheet_name=sheet_id)\
                             .iterrows():
@@ -57,7 +58,7 @@ def main():
                 #######################################################
 
                 try:
-                    if sheet_id == 0:
+                    if sheet_id == 0 or sheet_id == 3:
                         product = sel.search(driver=driver, url=url)
                     else:
                         product = sel.search_klik(driver=driver, url=url)
@@ -79,7 +80,7 @@ def main():
                     product['plu_alfa'] = plu_alfa
                     products.append(product)
 
-                    print(products)
+                    #print(products)
 
                     with open(SAVED_FILE, 'w', encoding='utf-8') as f:
                         json.dump(products, f, ensure_ascii=False, indent=4)
