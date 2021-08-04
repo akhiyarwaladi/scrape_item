@@ -2,6 +2,9 @@ from with_selenium import browse_with_selenium as sel
 import pandas as pd
 import json
 import os
+import sys
+sys.path.append('/home/server/gli-data-science')
+import lib_3d
 
 SHOPEE_URL = "https://shopee.co.id/"
 SEARCH_ENDPOINT = "api/v2/search_items/"
@@ -15,7 +18,7 @@ def main():
     driver = sel.init()
     with open(os.path.join(parent_path,'dead_link.txt'), 'w') as li_link:    
         for sheet_id in range(0,4,1):
-            #sheet_id = 2
+            #sheet_id = 3
             #if sheet_id == 0 or sheet_id == 1 or sheet_id == 2:
             #    continue
             for idx, row in pd.read_excel(os.path.join(parent_path,\
@@ -78,9 +81,22 @@ def main():
 
                     # get our plu as a key to search item
                     product['plu_alfa'] = plu_alfa
+                    if (product['title'] == '-') or (product['price'] == '-'):
+                        continue
+                        lib = lib_3d.desan()
+
+                        preceiver = "akhiyar.waladi@gli.id"
+                        print(preceiver)
+
+                        psubject = ''
+                        pbody = """
+                           Please check {} \n\n {}
+                        """.format(datetime.now().date().strftime('%d%b%Y'), product)
+
+                        lib.kirim_email_noreply(preceiver, psubject, pbody, spath_susu)
+                    ## if all detail not '-' (empty)
                     products.append(product)
 
-                    #print(products)
 
                     with open(SAVED_FILE, 'w', encoding='utf-8') as f:
                         json.dump(products, f, ensure_ascii=False, indent=4)

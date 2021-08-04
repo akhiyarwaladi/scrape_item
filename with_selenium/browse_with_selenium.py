@@ -122,8 +122,14 @@ def search(driver, url):
     try:                                            
         title = driver.find_elements_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[2]/div[3]/div/div[1]/span')
     except NoSuchElementException: 
-        title = '-'
-        product['title'] = title
+        title = []
+
+
+    if len(title) == 0:
+        try:
+            title = driver.find_elements_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[1]/div[3]/div/div[1]/span')
+        except NoSuchElementException:
+            title = []
 
 
     if len(title) == 0:
@@ -138,7 +144,14 @@ def search(driver, url):
     except NoSuchElementException:
         price = '-'
         product['price'] = price
-        
+
+    if (price == '-'):
+        try:
+            price = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[1]/div[3]/div/div[3]/div/div')
+        except Exception as e:
+            price = '-'
+            product['price'] = price
+
     if (price == '-'):
         try:
             price = driver.find_element_by_xpath('//*[@id="main"]/div/div[2]/div[2]/div[2]/div[3]/div[3]/div/div[3]/div/div')
