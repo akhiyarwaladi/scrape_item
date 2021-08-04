@@ -82,7 +82,7 @@ def main():
                     # get our plu as a key to search item
                     product['plu_alfa'] = plu_alfa
                     if (product['title'] == '-') or (product['price'] == '-'):
-                        continue
+                        
                         lib = lib_3d.desan()
 
                         preceiver = "akhiyar.waladi@gli.id"
@@ -94,6 +94,7 @@ def main():
                         """.format(datetime.now().date().strftime('%d%b%Y'), product)
 
                         lib.kirim_email_noreply(preceiver, psubject, pbody, spath_susu)
+                        continue
                     ## if all detail not '-' (empty)
                     products.append(product)
 
