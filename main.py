@@ -35,9 +35,9 @@ def main():
                 print(plu_alfa)      
 
 
-                # SEARCH_KEYWORD = 'Similac GainPlus 850 g (1-3 tahun) Susu Pertumbuhan'
-                # url = 'https://shopee.co.id/Dougo-Minyak-Canola-100-1000ML-i.40341578.1683845867'
-                # plu_alfa = 234331
+                SEARCH_KEYWORD = 'Sunlight Professional Sabun Cuci Piring Cair Jeruk Nipis 5 L Jerigen'
+                url = 'https://shopee.co.id/Sunlight-Sabun-Cuci-Piring-Cair-Professional-Jeruk-Nipis-Jerigen-5000-ml-i.276953550.6139557435'
+                plu_alfa = 425949
                 
                 
                 SAVED_FILE = os.path.join(parent_path, "product_scrape_{}/{}.json"\
