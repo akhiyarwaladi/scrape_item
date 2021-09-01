@@ -113,7 +113,7 @@ def search(driver, url):
         return None
 
     driver.get(url)
-    time.sleep(10)
+    time.sleep(8)
     product = {
         'url' : url,
 

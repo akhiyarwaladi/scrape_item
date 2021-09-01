@@ -16,7 +16,7 @@ def main():
     """Using selenium to scrape Shopee """
 
     driver = sel.init()
-    with open(os.path.join(parent_path,'dead_link.txt'), 'w') as li_link:    
+    with open(os.path.join(parent_path,'irregular_link.txt'), 'w') as li_link:    
         for sheet_id in range(0,4,1):
             #sheet_id = 3
             #if sheet_id == 0 or sheet_id == 1 or sheet_id == 2:
@@ -35,13 +35,13 @@ def main():
                 print(plu_alfa)      
 
 
-                SEARCH_KEYWORD = 'Sunlight Professional Sabun Cuci Piring Cair Jeruk Nipis 5 L Jerigen'
-                url = 'https://shopee.co.id/Sunlight-Sabun-Cuci-Piring-Cair-Professional-Jeruk-Nipis-Jerigen-5000-ml-i.276953550.6139557435'
-                plu_alfa = 425949
+                #SEARCH_KEYWORD = 'Sunlight Professional Sabun Cuci Piring Cair Jeruk Nipis 5 L Jerigen'
+                #url = 'https://shopee.co.id/Sunlight-Sabun-Cuci-Piring-Cair-Professional-Jeruk-Nipis-Jerigen-5000-ml-i.276953550.6139557435'
+                #plu_alfa = 425949
                 
                 
                 SAVED_FILE = os.path.join(parent_path, "product_scrape_{}/{}.json"\
-                            .format(sheet_id, SEARCH_KEYWORD))
+                            .format(sheet_id, plu_alfa))
 
 
                 ######## if we dont have url we must search in database
@@ -82,7 +82,7 @@ def main():
                     # get our plu as a key to search item
                     product['plu_alfa'] = plu_alfa
                     if (product['title'] == '-') or (product['price'] == '-'):
-                        
+                        li_link.write("fail({})\n({})\n({})".format(plu_alfa, SEARCH_KEYWORD, str(url))+ '\n')
                         lib = lib_3d.desan()
 
                         preceiver = "akhiyar.waladi@gli.id"
@@ -106,7 +106,7 @@ def main():
                 except Exception as e:
                     print('{} --> {}'.format(e, SEARCH_KEYWORD))
                     
-                    li_link.write("({})\n({})".format(SEARCH_KEYWORD, str(url))+'\n')
+                    li_link.write("dead({})\n({})\n({})".format(plu_alfa, SEARCH_KEYWORD, str(url))+ '\n')
                     
     li_link.close()
 
