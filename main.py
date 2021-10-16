@@ -18,7 +18,7 @@ def main():
     driver = sel.init()
     with open(os.path.join(parent_path,'irregular_link.txt'), 'w') as li_link:    
         for sheet_id in range(0,4,1):
-            #sheet_id = 3
+            # sheet_id = 1
             #if sheet_id == 0 or sheet_id == 1 or sheet_id == 2:
             #    continue
             for idx, row in pd.read_excel(os.path.join(parent_path,\
