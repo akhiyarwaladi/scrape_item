@@ -19,10 +19,10 @@ def main():
     with open(os.path.join(parent_path,'irregular_link.txt'), 'w') as li_link:    
         for sheet_id in range(0,4,1):
             # sheet_id = 1
-            #if sheet_id == 0 or sheet_id == 1 or sheet_id == 2:
+            #if sheet_id == 0 or sheet_id == 1:
             #    continue
             for idx, row in pd.read_excel(os.path.join(parent_path,\
-                            '20210421_TagI_Competitiveness.xlsx'), sheet_name=sheet_id)\
+                            '20210421_TagI_Competitiveness_2.xlsx'), sheet_name=sheet_id)\
                             .iterrows():
                 products=[]
 
